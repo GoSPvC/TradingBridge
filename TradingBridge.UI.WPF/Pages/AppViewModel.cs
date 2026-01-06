@@ -14,12 +14,11 @@ namespace TradingBridge.UI.WPF.Pages;
 /// <summary>
 /// Main application view model that manages navigation.
 /// </summary>
-/// <param name="navigationService">The navigation service.</param>
 [Tag("Chged: Coding Convention/StyleCop", Version = 2.10, Date = "04.01.2026")]
-#pragma warning disable SA1009
-public partial class AppViewModel(INavigationService navigationService) : BaseViewModel
-#pragma warning restore SA1009
+public partial class AppViewModel : BaseViewModel
 {
+    private readonly INavigationService navigationService;
+
     /// <summary>
     /// Gets or sets the current page view model.
     /// </summary>
@@ -27,12 +26,21 @@ public partial class AppViewModel(INavigationService navigationService) : BaseVi
     private object? currentPageViewModel;
 
     /// <summary>
+    /// Initializes a new instance of the <see cref="AppViewModel"/> class.
+    /// </summary>
+    /// <param name="navigationService">The navigation service.</param>
+    public AppViewModel(INavigationService navigationService)
+    {
+        this.navigationService = navigationService;
+    }
+
+    /// <summary>
     /// Initializes the application view model.
     /// </summary>
     public void Initialize()
     {
-        navigationService.CurrentViewModelChanged += this.OnCurrentViewModelChanged;
-        navigationService.NavigateTo<HomeViewModel>();
+        this.navigationService.CurrentViewModelChanged += this.OnCurrentViewModelChanged;
+        this.navigationService.NavigateTo<HomeViewModel>();
     }
 
     /// <summary>
@@ -41,7 +49,7 @@ public partial class AppViewModel(INavigationService navigationService) : BaseVi
     [RelayCommand]
     private void NavigateToHome()
     {
-        navigationService.NavigateTo<HomeViewModel>();
+        this.navigationService.NavigateTo<HomeViewModel>();
     }
 
     // /// <summary>
@@ -63,6 +71,6 @@ public partial class AppViewModel(INavigationService navigationService) : BaseVi
     // }
     private void OnCurrentViewModelChanged(object? sender, EventArgs e)
     {
-        this.CurrentPageViewModel = navigationService.CurrentViewModel;
+        this.CurrentPageViewModel = this.navigationService.CurrentViewModel;
     }
 }
