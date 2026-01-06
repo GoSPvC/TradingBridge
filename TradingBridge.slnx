@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+  </Folder>
+  <Project Path="TradingBridge.Core/TradingBridge.Core.csproj" />
+  <Project Path="TradingBridge.Infrastructure/TradingBridge.Infrastructure.csproj" />
+  <Project Path="TradingBridge.UI.WPF/TradingBridge.UI.WPF.csproj" />
+</Solution>
