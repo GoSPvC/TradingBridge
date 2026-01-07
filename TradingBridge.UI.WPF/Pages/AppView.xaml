@@ -7,6 +7,7 @@
         
         xmlns:local="clr-namespace:TradingBridge.UI.WPF.Pages"
         xmlns:home="clr-namespace:TradingBridge.UI.WPF.Pages.Home"
+        xmlns:namedPipe="clr-namespace:TradingBridge.UI.WPF.Pages.NamedPipeServer"
 
         d:DataContext="{d:DesignInstance Type=local:AppViewModel}"
         mc:Ignorable="d"
@@ -21,6 +22,9 @@
         <!-- DataTemplates for View-ViewModel mapping -->
         <DataTemplate DataType="{x:Type home:HomeViewModel}">
             <home:HomeView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type namedPipe:NamedPipeServerViewModel}">
+            <namedPipe:NamedPipeServerView/>
         </DataTemplate>
     </Window.Resources>
 
@@ -47,6 +51,11 @@
                 <!-- Navigation Buttons -->
                 <Button Content="🏠 Home"
                 Command="{Binding NavigateToHomeCommand}"
+                Style="{StaticResource NavigationButtonStyle}"
+                Margin="10,5"/>
+
+                <Button Content="🔌 Named Pipe Server"
+                Command="{Binding NavigateToNamedPipeServerCommand}"
                 Style="{StaticResource NavigationButtonStyle}"
                 Margin="10,5"/>
             </StackPanel>

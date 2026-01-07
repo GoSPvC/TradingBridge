@@ -8,6 +8,7 @@ using TradingBridge.Core.Common.Attributes;
 using TradingBridge.UI.WPF.Abstractions.ViewModels;
 using TradingBridge.UI.WPF.Common.Interfaces;
 using TradingBridge.UI.WPF.Pages.Home;
+using TradingBridge.UI.WPF.Pages.NamedPipeServer;
 
 namespace TradingBridge.UI.WPF.Pages;
 
@@ -50,6 +51,15 @@ public partial class AppViewModel : BaseViewModel
     private void NavigateToHome()
     {
         this.navigationService.NavigateTo<HomeViewModel>();
+    }
+
+    /// <summary>
+    /// Gets the command to navigate to the Named Pipe server page.
+    /// </summary>
+    [RelayCommand]
+    private void NavigateToNamedPipeServer()
+    {
+        this.navigationService.NavigateTo<NamedPipeServerViewModel>();
     }
 
     // /// <summary>

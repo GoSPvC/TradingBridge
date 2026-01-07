@@ -4,6 +4,8 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using TradingBridge.Core.Common.Attributes;
+using TradingBridge.Core.Domain.Interfaces;
+using TradingBridge.Infrastructure.Services;
 
 namespace TradingBridge.UI.WPF.Services;
 
@@ -27,6 +29,11 @@ public static class DependencyInjection
         // Register shared services (Singletons for data sharing across ViewModels)
         // services.AddSingleton<ICurrentUserService, CurrentUserService>();
         // services.AddSingleton<ICartService, CartService>();
+        // Register Named Pipe server
+
+        // Register UI-specific services here if needed
+        // services.AddSingleton<IDialogService, DialogService>();
+        services.AddSingleton<INamedPipeServer, NamedPipeServer>();
         return services;
     }
 }

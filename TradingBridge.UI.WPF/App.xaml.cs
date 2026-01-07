@@ -10,6 +10,7 @@ using TradingBridge.UI.WPF.Common.Interfaces;
 using TradingBridge.UI.WPF.Common.Services;
 using TradingBridge.UI.WPF.Pages;
 using TradingBridge.UI.WPF.Pages.Home;
+using TradingBridge.UI.WPF.Pages.NamedPipeServer;
 using TradingBridge.UI.WPF.Services;
 
 namespace TradingBridge.UI.WPF;
@@ -66,6 +67,7 @@ public partial class App : Application
         // Add ViewModels
         services.AddSingleton<AppViewModel>();
         services.AddTransient<HomeViewModel>();
+        services.AddTransient<NamedPipeServerViewModel>();
 
         // Add Views (Windows)
         services.AddSingleton<AppView>();
