@@ -18,7 +18,7 @@ namespace TradingBridge.UI.WPF;
 /// <summary>
 /// Interaction logic for App.xaml.
 /// </summary>
-[Tag("Chged: Coding Convention/StyleCop", Version = 2.10, Date = "04.01.2026")]
+[Tag("Chged: Coding Convention/StyleCop", Version = 2.11, Date = "07.01.2026")]
 public partial class App : Application
 {
     private ServiceProvider? serviceProvider;
@@ -58,7 +58,7 @@ public partial class App : Application
             configure.SetMinimumLevel(LogLevel.Information);
         });
 
-        // Add infrastructure services (repositories etc.)
+        // Add infrastructure services (repositories, Named Pipe server, etc.)
         services.AddInfrastructure();
 
         // Add navigation service
@@ -67,7 +67,7 @@ public partial class App : Application
         // Add ViewModels
         services.AddSingleton<AppViewModel>();
         services.AddTransient<HomeViewModel>();
-        services.AddTransient<NamedPipeServerViewModel>();
+        services.AddSingleton<NamedPipeServerViewModel>();
 
         // Add Views (Windows)
         services.AddSingleton<AppView>();

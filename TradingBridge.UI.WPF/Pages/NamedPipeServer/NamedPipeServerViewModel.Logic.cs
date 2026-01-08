@@ -41,7 +41,21 @@ public partial class NamedPipeServerViewModel : BaseViewModel
 
         this.PipeName = this.namedPipeServer.PipeName;
 
-        this.MessageLog.Add($"[{DateTime.Now:HH:mm:ss}] Named Pipe Server initialized");
+        // Sync with current server state
+        this.IsServerRunning = this.namedPipeServer.IsRunning;
+
+        // Sync connected clients
+        foreach (var client in this.namedPipeServer.ConnectedClients)
+        {
+            this.ConnectedClients.Add(client);
+        }
+
+        this.MessageLog.Add($"[{DateTime.Now:HH:mm:ss}] Named Pipe Server ViewModel initialized");
+
+        if (this.IsServerRunning)
+        {
+            this.MessageLog.Add($"[{DateTime.Now:HH:mm:ss}] Server is running on pipe: {this.PipeName}");
+        }
     }
 
     /// <summary>
