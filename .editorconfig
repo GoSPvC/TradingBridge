@@ -166,5 +166,9 @@ dotnet_diagnostic.CS8604.severity = error
 
 # More Rules:
 
-# IDE0290: Prim‰ren Konstruktor verwenden
+# IDE0290: Prim√§ren Konstruktor verwenden
 dotnet_diagnostic.IDE0290.severity = none
+
+# SA1010: Opening square brackets should be spaced correctly
+# e.g.: public ObservableCollection<string> Collection { get; set; } = [];
+dotnet_diagnostic.SA1010.severity = none

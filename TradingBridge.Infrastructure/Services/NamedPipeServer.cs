@@ -23,8 +23,7 @@ public class NamedPipeServer : INamedPipeServer
     private readonly ILogger<NamedPipeServer> logger;
     private readonly ConcurrentDictionary<string, NamedPipeServerStream> connectedPipes;
     private readonly ConcurrentDictionary<string, ConnectionStatus> clientStatuses;
-    private readonly CancellationTokenSource cancellationTokenSource;
-    private bool isRunning;
+    private CancellationTokenSource cancellationTokenSource;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="NamedPipeServer"/> class.
@@ -52,42 +51,64 @@ public class NamedPipeServer : INamedPipeServer
     public event EventHandler<string>? ErrorOccurred;
 
     /// <inheritdoc/>
-    public bool IsRunning => this.isRunning;
+    public bool IsRunning { get; private set; }
 
     /// <inheritdoc/>
     public string PipeName { get; }
 
     /// <inheritdoc/>
     public IReadOnlyList<ConnectionStatus> ConnectedClients =>
-        this.clientStatuses.Values.ToList();
+        [.. this.clientStatuses.Values];
 
     /// <inheritdoc/>
-    public async Task StartAsync()
+    public Task StartAsync()
     {
-        if (this.isRunning)
+        if (this.IsRunning)
         {
             this.logger.LogWarning("Server is already running");
-            return;
+            return Task.CompletedTask;
         }
 
-        this.isRunning = true;
+        // Create new cancellation token source for this server session
+        try
+        {
+            this.cancellationTokenSource?.Dispose();
+        }
+        catch (ObjectDisposedException)
+        {
+            // Already disposed
+        }
+
+        this.cancellationTokenSource = new CancellationTokenSource();
+        this.IsRunning = true;
         this.logger.LogInformation("Starting Named Pipe server on pipe: {PipeName}", this.PipeName);
 
-        await Task.Run(() => this.ListenForClientsAsync(), this.cancellationTokenSource.Token);
+        // Start listening in background without blocking
+        _ = this.ListenForClientsAsync();
+
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc/>
     public async Task StopAsync()
     {
-        if (!this.isRunning)
+        if (!this.IsRunning)
         {
             this.logger.LogWarning("Server is not running");
             return;
         }
 
         this.logger.LogInformation("Stopping Named Pipe server");
-        this.isRunning = false;
-        this.cancellationTokenSource.Cancel();
+        this.IsRunning = false;
+
+        try
+        {
+            this.cancellationTokenSource.Cancel();
+        }
+        catch (ObjectDisposedException)
+        {
+            // Token source already disposed
+        }
 
         foreach (var pipe in this.connectedPipes.Values)
         {
@@ -104,6 +125,16 @@ public class NamedPipeServer : INamedPipeServer
 
         this.connectedPipes.Clear();
         this.clientStatuses.Clear();
+
+        // Dispose old token source and create new one for next start
+        try
+        {
+            this.cancellationTokenSource.Dispose();
+        }
+        catch (ObjectDisposedException)
+        {
+            // Already disposed
+        }
 
         await Task.CompletedTask;
     }
@@ -132,7 +163,7 @@ public class NamedPipeServer : INamedPipeServer
 
     private async Task ListenForClientsAsync()
     {
-        while (this.isRunning && !this.cancellationTokenSource.Token.IsCancellationRequested)
+        while (this.IsRunning && !this.cancellationTokenSource.Token.IsCancellationRequested)
         {
             try
             {
@@ -183,7 +214,7 @@ public class NamedPipeServer : INamedPipeServer
         {
             var buffer = new byte[4096];
 
-            while (this.isRunning && pipeStream.IsConnected)
+            while (this.IsRunning && pipeStream.IsConnected)
             {
                 var bytesRead = await pipeStream.ReadAsync(buffer, this.cancellationTokenSource.Token);
 
