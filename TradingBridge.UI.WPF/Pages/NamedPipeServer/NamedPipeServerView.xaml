@@ -6,6 +6,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              
              xmlns:local="clr-namespace:TradingBridge.UI.WPF.Pages.NamedPipeServer"
+             xmlns:behaviors="clr-namespace:TradingBridge.UI.WPF.Behaviors"
+             
              d:DataContext="{d:DesignInstance Type=local:NamedPipeServerViewModel}"
              
              mc:Ignorable="d"
@@ -239,7 +241,8 @@
                 <ScrollViewer Grid.Row="1"
                               VerticalScrollBarVisibility="Auto"
                               Background="White"
-                              Padding="10">
+                              Padding="10"
+                              behaviors:AutoScrollBehavior.AutoScroll="True">
                     <ItemsControl ItemsSource="{Binding MessageLog}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>

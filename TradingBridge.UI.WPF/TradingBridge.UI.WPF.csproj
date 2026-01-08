@@ -47,7 +47,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Behaviors\" />
     <Folder Include="Common\Commands\" />
     <Folder Include="ViewModelLocator\" />
     <Folder Include="Resources\Icons\" />
